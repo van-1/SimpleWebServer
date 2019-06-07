@@ -14,7 +14,7 @@
 #include <fcntl.h>
 
 // STL
-#include <unordered_map>
+#include <thread>
 
 // Local
 #include "sock.h"
@@ -73,25 +73,24 @@ namespace ServerEpoll
                     {
                       char* findIndex = strstr(buffer, "GET /index.html");
                       char* findRoot = strstr(buffer, "GET / HTTP/1.0");
-                      std::cout << buffer;
                       if (findIndex == nullptr)
                       {
                         if (findRoot != nullptr)
                         {
                           std::string dataToSend(HTTP::response200);
                           dataToSend += HTTP::indexHtml;
-                          client.write(dataToSend.c_str(), dataToSend.length());
+                          client.sendAll(dataToSend.c_str(), dataToSend.length());
                         }
                         else
                         {
-                          client.write(HTTP::response404.c_str(), HTTP::response404.length());
+                          client.sendAll(HTTP::response404.c_str(), HTTP::response404.length());
                         }
                       }
                       else
                       {
                         std::string dataToSend(HTTP::response200);
                         dataToSend += HTTP::indexHtml;
-                        client.write(dataToSend.c_str(), dataToSend.length());
+                        client.sendAll(dataToSend.c_str(), dataToSend.length());
                       }
                       client.shutdown();
                       client.close();
