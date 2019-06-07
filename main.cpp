@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
   }
 
   if (globalArgs.daemonize)
-    daemonize();
+    daemonize("/tmp");
 
   ThreadPool threadsPool (std::thread::hardware_concurrency(), 256);
 

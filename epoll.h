@@ -81,7 +81,9 @@ namespace ServerEpoll
                         std::string dataToSend(HTTP::response200);
                         dataToSend += HTTP::indexHtml;
                         client.sendAll(dataToSend.c_str(), dataToSend.length());
-                       }
+                        client.shutdown();
+                        client.close();
+                      }
                     }
                 }
             }
