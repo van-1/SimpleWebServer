@@ -5,7 +5,7 @@
 
 namespace HTTP
 {
-  static const std::string indexHtml = "<b>MAIN PAGE</b>";
+  static const std::string indexHtml = "<b>Hello world!</b>";
 
   static const std::string response404 = "HTTP/1.0 404 NOT FOUND\r\n"
                                           "Content-length: 0\r\n"
