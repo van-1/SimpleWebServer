@@ -71,19 +71,29 @@ namespace ServerEpoll
                     }
                     else if (recvResult > 0)
                     {
-                      char* find_index = strstr(buffer, "GET /index.html");
-                      if (find_index == nullptr)
+                      char* findIndex = strstr(buffer, "GET /index.html");
+                      char* findRoot = strstr(buffer, "GET / HTTP/1.0");
+                      if (findIndex == nullptr)
                       {
-                        client.sendAll(HTTP::response404.c_str(), HTTP::response404.length());
+                        if (findRoot != nullptr)
+                        {
+                          std::string dataToSend(HTTP::response200);
+                          dataToSend += HTTP::indexHtml;
+                          client.sendAll(dataToSend.c_str(), dataToSend.length());
+                        }
+                        else
+                        {
+                          client.sendAll(HTTP::response404.c_str(), HTTP::response404.length());
+                        }
                       }
                       else
                       {
                         std::string dataToSend(HTTP::response200);
                         dataToSend += HTTP::indexHtml;
                         client.sendAll(dataToSend.c_str(), dataToSend.length());
-                        client.shutdown();
-                        client.close();
                       }
+                      client.shutdown();
+                      client.close();
                     }
                 }
             }
