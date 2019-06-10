@@ -25,9 +25,11 @@
 
 namespace ServerEpoll
 {
-
     void serverEpoll(int serverSocket)
     {
+        // https://stackoverflow.com/questions/31357215/is-it-ok-to-share-the-same-epoll-file-descriptor-among-threads
+        // With a separate epoll fd for each thread, then each thread is essentially responsible for
+        // a subset of clients (those clients that were accepted by that thread).
         int epoll = epoll_create1(0);
         epoll_event event;
         event.data.fd = serverSocket;
@@ -38,7 +40,6 @@ namespace ServerEpoll
         {
             epoll_event events[MAX_EVENTS];
             int n = epoll_wait(epoll, events, MAX_EVENTS, -1);
-
             for (int i = 0; i < n; i++)
             {
                 if (events[i].data.fd == serverSocket)
