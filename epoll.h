@@ -31,7 +31,7 @@ namespace ServerEpoll
         int epoll = epoll_create1(0);
         epoll_event event;
         event.data.fd = serverSocket;
-        event.events = EPOLLIN;
+        event.events = EPOLLIN | EPOLLEXCLUSIVE;
         epoll_ctl(epoll, EPOLL_CTL_ADD, serverSocket, &event);
 
         while (true)
