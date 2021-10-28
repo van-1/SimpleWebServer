@@ -4,7 +4,7 @@ project(final)
 
 find_package(Threads REQUIRED)
 
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++17)
 
 add_executable(final main.cpp threadpool.h sock.h epoll.h daemonize.h handleHttpRequest.h)
 
