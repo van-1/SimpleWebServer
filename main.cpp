@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
   if (globalArgs.daemonize)
     daemonize("/tmp");
 
-  ThreadPool threadsPool (std::thread::hardware_concurrency(), 256);
+  ThreadPool threadsPool;
 
   /* create a server socket */
   Sock server(AF_INET, SOCK_STREAM);
@@ -96,8 +96,10 @@ int main(int argc, char *argv[])
 
   int serverFd = server.fd();
   for (int i = 0; i < std::thread::hardware_concurrency(); ++i)
-    threadsPool.addJob(clientRead, &serverFd);
+  {
+    ThreadPool::ThreadPtr Thread(new std::thread(clientRead, &serverFd), ThreadPool::ThreadDeleter);
+    threadsPool.threads.push_back(std::move(Thread));
+  }
 
-  threadsPool.wait();
   return 0;
 }
